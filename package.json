@@ -1,0 +1,22 @@
+{
+  "name": "negatopos",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Client-side negative film to positive converter",
+  "type": "module",
+  "scripts": {
+    "start": "python -m http.server 8080",
+    "test:algo": "node scripts/smoke-worker.mjs",
+    "test:e2e": "node scripts/e2e-smoke.mjs",
+    "test": "npm run test:algo && npm run test:e2e"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/burakkutlu27/NegaToPos.git"
+  },
+  "license": "MIT",
+  "devDependencies": {
+    "playwright": "^1.62.1",
+    "pngjs": "^7.0.0"
+  }
+}

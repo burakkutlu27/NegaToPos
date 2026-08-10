@@ -8,7 +8,7 @@ Görseller sunucuya gönderilmez — tüm işlem Canvas + Web Worker ile cihazı
 
 https://burakkutlu27.github.io/NegaToPos/
 
-> GitHub Pages’i repo ayarlarından `main` (veya `master`) branch / root olarak etkinleştirdikten sonra link aktif olur.
+Kaynak: https://github.com/burakkutlu27/NegaToPos
 
 ## Özellikler
 
@@ -57,6 +57,17 @@ Tarayıcıda: http://localhost:8080
 | `E` | Pipet |
 | `R` | Ayarları sıfırla |
 | `Ctrl/Cmd + S` | İndir |
+
+## Testler
+
+```bash
+npm install
+npx playwright install chromium
+npm test
+```
+
+- `test:algo` — Worker pipeline smoke (Node)
+- `test:e2e` — yükleme + canvas boyama (Playwright)
 
 ## Lisans
 
