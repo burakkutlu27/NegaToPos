@@ -1,0 +1,260 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NegaToPos — Negatif filmi tarayıcıda pozitife çevir</title>
+    <meta name="description" content="Negatif film fotoğraflarını tarayıcıda pozitife çevirin. Turuncu maske düzeltmesi, pipet ile beyaz dengesi ve ton kontrolleri. Görseller cihazınızdan dışarı çıkmaz.">
+    <meta name="theme-color" content="#100e0c">
+    <link rel="canonical" href="https://burakkutlu27.github.io/NegaToPos/">
+
+    <meta property="og:type" content="website">
+    <meta property="og:locale" content="tr_TR">
+    <meta property="og:url" content="https://burakkutlu27.github.io/NegaToPos/">
+    <meta property="og:title" content="NegaToPos — Negatif Film Dönüştürücü">
+    <meta property="og:description" content="Negatif filmi tarayıcıda pozitife çeviren ücretsiz araç. Gizlilik odaklı: işlem tamamen yerel.">
+    <meta property="og:image" content="https://burakkutlu27.github.io/NegaToPos/assets/og.png">
+
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="NegaToPos — Negatif Film Dönüştürücü">
+    <meta name="twitter:description" content="Negatif filmi tarayıcıda pozitife çevirin. Görseller sunucuya gönderilmez.">
+    <meta name="twitter:image" content="https://burakkutlu27.github.io/NegaToPos/assets/og.png">
+
+    <link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@600&family=IBM+Plex+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="css/styles.css">
+
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "WebApplication",
+      "name": "NegaToPos",
+      "url": "https://burakkutlu27.github.io/NegaToPos/",
+      "description": "Negatif film fotoğraflarını tarayıcıda pozitife çeviren ücretsiz araç.",
+      "applicationCategory": "MultimediaApplication",
+      "operatingSystem": "Any",
+      "browserRequirements": "Requires HTML5 Canvas and Web Workers",
+      "offers": {
+        "@type": "Offer",
+        "price": "0",
+        "priceCurrency": "USD"
+      },
+      "inLanguage": "tr"
+    }
+    </script>
+</head>
+<body>
+    <a class="skip-link" href="#app-main">İçeriğe geç</a>
+
+    <header class="site-header">
+        <div class="header-inner">
+            <a class="brand" href="./" aria-label="NegaToPos ana sayfa">
+                <svg class="brand-mark" viewBox="0 0 36 36" fill="none" aria-hidden="true">
+                    <rect x="3" y="8" width="30" height="20" rx="2" stroke="#e8a45c" stroke-width="1.6"/>
+                    <circle cx="18" cy="18" r="6" stroke="#e8a45c" stroke-width="1.6"/>
+                    <circle cx="18" cy="18" r="2.2" fill="#e8a45c"/>
+                    <path d="M8 5h3M14 5h3M19 5h3M25 5h3M8 31h3M14 31h3M19 31h3M25 31h3" stroke="#e8a45c" stroke-width="1.6" stroke-linecap="round"/>
+                </svg>
+                <span class="brand-text">
+                    <span class="brand-name">NegaToPos</span>
+                    <span class="brand-tag">Darkroom in the browser</span>
+                </span>
+            </a>
+            <p class="privacy-chip"><strong>Yerel</strong> · görseller sunucuya gitmez</p>
+        </div>
+    </header>
+
+    <main id="app-main" class="site-main">
+        <section id="upload-section" class="section upload-hero is-visible" aria-labelledby="upload-title">
+            <p class="upload-kicker">Negatif → pozitif</p>
+            <h1 id="upload-title">Filmin turuncu gölgesini<br>ışığa çevir.</h1>
+            <p class="upload-lead">
+                Taranmış veya fotoğraflanmış negatifleri tarayıcıda pozitife dönüştürün.
+                Otomatik maske düzeltmesi, pipet ve ton kontrolleri — hepsi cihazınızda.
+            </p>
+
+            <div
+                class="dropzone"
+                id="upload-zone"
+                role="button"
+                tabindex="0"
+                aria-controls="file-input"
+                aria-label="Negatif görsel yükle"
+            >
+                <svg class="dropzone-icon" viewBox="0 0 48 48" fill="none" aria-hidden="true">
+                    <path d="M24 34V14M24 14l-7 7M24 14l7 7" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/>
+                    <path d="M38 28v8a3 3 0 01-3 3H13a3 3 0 01-3-3v-8" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"/>
+                </svg>
+                <h2>Negatifleri buraya bırakın</h2>
+                <p>veya dosya seçin — birden fazla görsel yükleyebilirsiniz</p>
+                <p class="dropzone-formats">JPG, PNG, WebP, GIF, BMP, AVIF · tek dosya en fazla 40&nbsp;MB</p>
+                <input type="file" id="file-input" accept="image/jpeg,image/png,image/webp,image/gif,image/bmp,image/avif" multiple hidden>
+                <button type="button" class="btn btn-primary" id="select-btn">Dosya seç</button>
+            </div>
+
+            <div class="hint-row" aria-hidden="false">
+                <span>Kenar örneklemeli otomatik beyaz dengesi</span>
+                <span>Karşılaştırma kaydırıcısı</span>
+                <span>Toplu indirme</span>
+            </div>
+        </section>
+
+        <section id="editor-section" class="section" hidden aria-label="Düzenleyici">
+            <div class="editor-layout">
+                <div class="preview-col">
+                    <div class="preview-toolbar">
+                        <div class="tabs" role="tablist" aria-label="Önizleme modu">
+                            <button type="button" class="tab is-active" role="tab" data-tab="split" aria-selected="true">Karşılaştır</button>
+                            <button type="button" class="tab" role="tab" data-tab="original" aria-selected="false">Negatif</button>
+                            <button type="button" class="tab" role="tab" data-tab="result" aria-selected="false">Pozitif</button>
+                        </div>
+                        <p class="image-count" id="image-count" hidden></p>
+                    </div>
+
+                    <div class="preview-frame" id="preview-container">
+                        <div class="preview-split" id="preview-split">
+                            <div class="preview-half original-half">
+                                <canvas id="canvas-original" aria-label="Orijinal negatif"></canvas>
+                                <div class="preview-label">Negatif</div>
+                            </div>
+                            <div
+                                class="split-divider"
+                                id="split-divider"
+                                role="separator"
+                                aria-orientation="vertical"
+                                aria-valuemin="12"
+                                aria-valuemax="88"
+                                aria-valuenow="50"
+                                aria-label="Karşılaştırma ayırıcısı"
+                                tabindex="0"
+                            >
+                                <div class="split-handle" aria-hidden="true">
+                                    <svg width="12" height="16" viewBox="0 0 12 16" fill="none">
+                                        <path d="M4 3L1 8l3 5M8 3l3 5-3 5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+                                    </svg>
+                                </div>
+                            </div>
+                            <div class="preview-half result-half">
+                                <canvas id="canvas-result" aria-label="Dönüştürülmüş pozitif"></canvas>
+                                <div class="preview-label">Pozitif</div>
+                            </div>
+                        </div>
+
+                        <div class="processing-overlay" id="processing-overlay" hidden>
+                            <div class="film-progress" aria-hidden="true"></div>
+                            <p id="processing-text">Negatif dönüştürülüyor…</p>
+                        </div>
+                    </div>
+
+                    <div class="thumb-strip" id="thumbnail-strip" aria-label="Yüklenen görseller"></div>
+                </div>
+
+                <aside class="controls" id="controls-panel" aria-label="Dönüştürme ayarları">
+                    <h2>Ayarlar</h2>
+
+                    <div class="control-block">
+                        <p class="control-label">Film tipi</p>
+                        <div class="segmented" role="group" aria-label="Film tipi">
+                            <button type="button" class="seg-btn is-active" data-film="color" aria-pressed="true">Renkli</button>
+                            <button type="button" class="seg-btn" data-film="bw" aria-pressed="false">Siyah-beyaz</button>
+                        </div>
+                    </div>
+
+                    <div class="control-block">
+                        <p class="control-label">Preset</p>
+                        <div class="segmented segmented-wide" role="group" aria-label="Ton presetleri">
+                            <button type="button" class="seg-btn is-active" data-preset="auto" aria-pressed="true">Otomatik</button>
+                            <button type="button" class="seg-btn" data-preset="soft" aria-pressed="false">Yumuşak</button>
+                            <button type="button" class="seg-btn" data-preset="punch" aria-pressed="false">Canlı</button>
+                            <button type="button" class="seg-btn" data-preset="cool" aria-pressed="false">Soğuk</button>
+                        </div>
+                    </div>
+
+                    <div class="control-block" id="orange-mask-group">
+                        <p class="control-label">Renk düzeltme</p>
+                        <button type="button" class="btn btn-accent is-active" id="auto-correct-btn" aria-pressed="true">
+                            <span data-autocorrect-label>Otomatik düzeltme açık</span>
+                        </button>
+                        <button type="button" class="btn btn-ghost btn-block" id="eyedropper-btn" aria-pressed="false">
+                            Pipet — film kenarına tıkla
+                        </button>
+                    </div>
+
+                    <div class="control-block">
+                        <div class="slider-head">
+                            <label for="brightness">Parlaklık</label>
+                            <span class="slider-val" id="brightness-value">0</span>
+                        </div>
+                        <input class="slider" type="range" id="brightness" min="-100" max="100" value="0">
+                    </div>
+
+                    <div class="control-block">
+                        <div class="slider-head">
+                            <label for="contrast">Kontrast</label>
+                            <span class="slider-val" id="contrast-value">0</span>
+                        </div>
+                        <input class="slider" type="range" id="contrast" min="-100" max="100" value="0">
+                    </div>
+
+                    <div class="control-block">
+                        <div class="slider-head">
+                            <label for="saturation">Doygunluk</label>
+                            <span class="slider-val" id="saturation-value">0</span>
+                        </div>
+                        <input class="slider" type="range" id="saturation" min="-100" max="100" value="0">
+                    </div>
+
+                    <div class="control-block">
+                        <div class="slider-head">
+                            <label for="temperature">Renk sıcaklığı</label>
+                            <span class="slider-val" id="temperature-value">0</span>
+                        </div>
+                        <input class="slider" type="range" id="temperature" min="-100" max="100" value="0">
+                    </div>
+
+                    <div class="control-block">
+                        <div class="slider-head">
+                            <label for="gamma">Gamma</label>
+                            <span class="slider-val" id="gamma-value">1.0</span>
+                        </div>
+                        <input class="slider" type="range" id="gamma" min="20" max="300" value="100">
+                    </div>
+
+                    <div class="actions">
+                        <button type="button" class="btn btn-ghost" id="reset-btn">Sıfırla</button>
+                        <button type="button" class="btn btn-primary" id="download-btn">İndir PNG</button>
+                    </div>
+
+                    <div class="stack-actions">
+                        <button type="button" class="btn btn-secondary btn-block" id="download-all-btn" hidden>Tümünü indir</button>
+                        <button type="button" class="btn btn-ghost btn-block" id="add-more-btn">Daha fazla ekle</button>
+                        <button type="button" class="btn btn-ghost btn-block" id="clear-all-btn">Temizle ve baştan başla</button>
+                    </div>
+
+                    <p class="kbd-hint">
+                        Kısayollar:
+                        <kbd>←</kbd><kbd>→</kbd> görsel,
+                        <kbd>E</kbd> pipet,
+                        <kbd>R</kbd> sıfırla,
+                        <kbd>Ctrl</kbd>+<kbd>S</kbd> indir
+                    </p>
+                </aside>
+            </div>
+        </section>
+    </main>
+
+    <div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+    <footer class="site-footer">
+        <p>
+            Tüm işlemler tarayıcınızda yapılır — fotoğraflarınız yüklenmez, kaydedilmez, paylaşılmaz.
+            <a href="https://github.com/burakkutlu27/NegaToPos">Kaynak kod</a>
+        </p>
+    </footer>
+
+    <script src="js/config.js"></script>
+    <script src="js/app.js"></script>
+</body>
+</html>
