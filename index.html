@@ -114,32 +114,30 @@
                     </div>
 
                     <div class="preview-frame" id="preview-container">
-                        <div class="preview-split" id="preview-split">
-                            <div class="preview-half original-half">
+                        <div class="preview-split" id="preview-split" data-mode="split">
+                            <div class="compare-stack" id="compare-stack" style="--split: 50%">
+                                <canvas id="canvas-result" aria-label="Dönüştürülmüş pozitif"></canvas>
                                 <canvas id="canvas-original" aria-label="Orijinal negatif"></canvas>
-                                <div class="preview-label">Negatif</div>
-                            </div>
-                            <div
-                                class="split-divider"
-                                id="split-divider"
-                                role="separator"
-                                aria-orientation="vertical"
-                                aria-valuemin="12"
-                                aria-valuemax="88"
-                                aria-valuenow="50"
-                                aria-label="Karşılaştırma ayırıcısı"
-                                tabindex="0"
-                            >
-                                <div class="split-handle" aria-hidden="true">
-                                    <svg width="12" height="16" viewBox="0 0 12 16" fill="none">
-                                        <path d="M4 3L1 8l3 5M8 3l3 5-3 5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
-                                    </svg>
+                                <div
+                                    class="split-divider"
+                                    id="split-divider"
+                                    role="separator"
+                                    aria-orientation="vertical"
+                                    aria-valuemin="12"
+                                    aria-valuemax="88"
+                                    aria-valuenow="50"
+                                    aria-label="Karşılaştırma ayırıcısı"
+                                    tabindex="0"
+                                >
+                                    <div class="split-handle" aria-hidden="true">
+                                        <svg width="12" height="16" viewBox="0 0 12 16" fill="none">
+                                            <path d="M4 3L1 8l3 5M8 3l3 5-3 5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+                                        </svg>
+                                    </div>
                                 </div>
                             </div>
-                            <div class="preview-half result-half">
-                                <canvas id="canvas-result" aria-label="Dönüştürülmüş pozitif"></canvas>
-                                <div class="preview-label">Pozitif</div>
-                            </div>
+                            <div class="preview-label label-neg">Negatif</div>
+                            <div class="preview-label label-pos">Pozitif</div>
                         </div>
 
                         <div class="processing-overlay" id="processing-overlay" hidden>

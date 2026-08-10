@@ -40,6 +40,7 @@
         canvasResult: document.getElementById('canvas-result'),
         previewContainer: document.getElementById('preview-container'),
         previewSplit: document.getElementById('preview-split'),
+        compareStack: document.getElementById('compare-stack'),
         splitDivider: document.getElementById('split-divider'),
         thumbnailStrip: document.getElementById('thumbnail-strip'),
         processingOverlay: document.getElementById('processing-overlay'),
@@ -341,10 +342,7 @@
         if (!state.images[index]) return;
         state.currentIndex = index;
         state.eyedropperWB = null;
-        state.eyedropperActive = false;
-        dom.eyedropperBtn.classList.remove('is-active');
-        dom.eyedropperBtn.setAttribute('aria-pressed', 'false');
-        dom.canvasOriginal.style.cursor = '';
+        setEyedropperMode(false);
 
         const imgData = state.images[index].originalData;
         dom.canvasOriginal.width = imgData.width;
@@ -505,33 +503,46 @@
         }
     }
 
+    function setEyedropperMode(on) {
+        state.eyedropperActive = !!on;
+        dom.eyedropperBtn.classList.toggle('is-active', state.eyedropperActive);
+        dom.eyedropperBtn.setAttribute('aria-pressed', String(state.eyedropperActive));
+        dom.previewContainer.classList.toggle('is-eyedropper', state.eyedropperActive);
+        if (state.eyedropperActive) {
+            showToast('Filmin boş kenarına tıklayın');
+        }
+    }
+
     function setupEyedropper() {
         dom.eyedropperBtn.addEventListener('click', () => {
             if (state.filmType !== 'color') return;
-            state.eyedropperActive = !state.eyedropperActive;
-            dom.eyedropperBtn.classList.toggle('is-active', state.eyedropperActive);
-            dom.eyedropperBtn.setAttribute('aria-pressed', String(state.eyedropperActive));
-            dom.canvasOriginal.style.cursor = state.eyedropperActive ? 'crosshair' : '';
-            if (state.eyedropperActive) {
-                showToast('Filmin boş kenarına tıklayın');
-            }
+            setEyedropperMode(!state.eyedropperActive);
         });
 
-        dom.canvasOriginal.addEventListener('click', (e) => {
-            if (!state.eyedropperActive) return;
-            const rect = dom.canvasOriginal.getBoundingClientRect();
-            const scaleX = dom.canvasOriginal.width / rect.width;
-            const scaleY = dom.canvasOriginal.height / rect.height;
+        const pickFromEvent = (e) => {
+            if (!state.eyedropperActive || !state.images[state.currentIndex]) return;
+
+            // Result canvas keeps a stable full-image box in split mode
+            const box = state.viewMode === 'original'
+                ? dom.canvasOriginal
+                : dom.canvasResult;
+            const rect = box.getBoundingClientRect();
+            if (!rect.width || !rect.height) return;
+
+            const scaleX = box.width / rect.width;
+            const scaleY = box.height / rect.height;
             const x = Math.floor((e.clientX - rect.left) * scaleX);
             const y = Math.floor((e.clientY - rect.top) * scaleY);
+
+            if (x < 0 || y < 0 || x >= box.width || y >= box.height) return;
+
             state.eyedropperWB = sampleWB(state.images[state.currentIndex].originalData, x, y);
-            state.eyedropperActive = false;
-            dom.eyedropperBtn.classList.remove('is-active');
-            dom.eyedropperBtn.setAttribute('aria-pressed', 'false');
-            dom.canvasOriginal.style.cursor = '';
+            setEyedropperMode(false);
             queueProcess(true);
             showToast('Beyaz dengesi güncellendi');
-        });
+        };
+
+        dom.compareStack.addEventListener('click', pickFromEvent);
     }
 
     function sampleWB(imageData, x, y) {
@@ -620,6 +631,7 @@
                 btn.setAttribute('aria-pressed', 'true');
                 state.filmType = btn.dataset.film;
                 state.eyedropperWB = null;
+                if (state.filmType === 'bw') setEyedropperMode(false);
                 dom.orangeMaskGroup.hidden = state.filmType === 'bw';
                 queueProcess(true);
             });
@@ -686,22 +698,16 @@
         showToast('Ayarlar sıfırlandı');
     }
 
+    function applySplitPosition() {
+        const pct = `${state.splitPosition}%`;
+        dom.compareStack.style.setProperty('--split', pct);
+        dom.splitDivider.setAttribute('aria-valuenow', String(Math.round(state.splitPosition)));
+    }
+
     function updateViewMode() {
-        const originalHalf = dom.previewSplit.querySelector('.original-half');
-        const resultHalf = dom.previewSplit.querySelector('.result-half');
-        const divider = dom.splitDivider;
-
-        originalHalf.hidden = state.viewMode === 'result';
-        resultHalf.hidden = state.viewMode === 'original';
-        divider.hidden = state.viewMode !== 'split';
-
+        dom.previewSplit.dataset.mode = state.viewMode;
         if (state.viewMode === 'split') {
-            originalHalf.style.flex = `0 0 ${state.splitPosition}%`;
-            resultHalf.style.flex = `0 0 ${100 - state.splitPosition}%`;
-            divider.style.left = `${state.splitPosition}%`;
-        } else {
-            originalHalf.style.flex = '';
-            resultHalf.style.flex = '';
+            applySplitPosition();
         }
     }
 
@@ -720,12 +726,12 @@
         const onDrag = (e) => {
             if (!state.isDraggingSplit) return;
             e.preventDefault();
-            const rect = dom.previewContainer.getBoundingClientRect();
+            const rect = dom.compareStack.getBoundingClientRect();
+            if (!rect.width) return;
             const clientX = e.touches ? e.touches[0].clientX : e.clientX;
             const pos = ((clientX - rect.left) / rect.width) * 100;
-            state.splitPosition = Math.max(12, Math.min(88, pos));
-            dom.splitDivider.setAttribute('aria-valuenow', String(Math.round(state.splitPosition)));
-            updateViewMode();
+            state.splitPosition = Math.max(8, Math.min(92, pos));
+            applySplitPosition();
         };
 
         const stopDrag = () => {
@@ -743,13 +749,11 @@
         dom.splitDivider.addEventListener('keydown', (e) => {
             if (state.viewMode !== 'split') return;
             if (e.key === 'ArrowLeft') {
-                state.splitPosition = Math.max(12, state.splitPosition - 2);
-                dom.splitDivider.setAttribute('aria-valuenow', String(Math.round(state.splitPosition)));
-                updateViewMode();
+                state.splitPosition = Math.max(8, state.splitPosition - 2);
+                applySplitPosition();
             } else if (e.key === 'ArrowRight') {
-                state.splitPosition = Math.min(88, state.splitPosition + 2);
-                dom.splitDivider.setAttribute('aria-valuenow', String(Math.round(state.splitPosition)));
-                updateViewMode();
+                state.splitPosition = Math.min(92, state.splitPosition + 2);
+                applySplitPosition();
             }
         });
     }

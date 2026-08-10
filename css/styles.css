@@ -417,38 +417,76 @@ button, input {
 
 .preview-split {
     display: flex;
-    width: 100%;
-    height: 100%;
-    min-height: inherit;
-    position: relative;
-}
-
-.preview-half {
-    flex: 1;
-    min-width: 0;
-    min-height: inherit;
-    display: flex;
     align-items: center;
     justify-content: center;
-    overflow: hidden;
+    width: 100%;
+    min-height: inherit;
     position: relative;
+    padding: var(--space-3);
 }
 
-.preview-half[hidden] {
-    display: none !important;
+/* Same-size stacked canvases + clip-path = real before/after reveal */
+.compare-stack {
+    position: relative;
+    display: inline-block;
+    max-width: 100%;
+    line-height: 0;
+    --split: 50%;
 }
 
-.preview-half canvas {
+.compare-stack #canvas-result {
+    position: relative;
+    z-index: 1;
+    display: block;
+    max-width: 100%;
     max-height: min(62vh, 560px);
     width: auto;
     height: auto;
-    object-fit: contain;
+}
+
+.compare-stack #canvas-original {
+    position: absolute;
+    inset: 0;
+    z-index: 2;
+    width: 100%;
+    height: 100%;
+    clip-path: inset(0 calc(100% - var(--split)) 0 0);
+}
+
+/* Eyedropper: custom cursor on the whole compare surface */
+.preview-frame.is-eyedropper,
+.preview-frame.is-eyedropper .compare-stack,
+.preview-frame.is-eyedropper .compare-stack canvas {
+    cursor: url("../assets/cursor-eyedropper.png") 5 28, crosshair !important;
+}
+
+.preview-frame.is-eyedropper .split-divider {
+    pointer-events: none;
+}
+
+.preview-split[data-mode="original"] #canvas-result,
+.preview-split[data-mode="result"] #canvas-original,
+.preview-split[data-mode="original"] .split-divider,
+.preview-split[data-mode="result"] .split-divider,
+.preview-split[data-mode="original"] .label-pos,
+.preview-split[data-mode="result"] .label-neg {
+    display: none !important;
+}
+
+.preview-split[data-mode="original"] #canvas-original {
+    position: relative;
+    inset: auto;
+    clip-path: none;
+    max-width: 100%;
+    max-height: min(62vh, 560px);
+    width: auto;
+    height: auto;
 }
 
 .preview-label {
     position: absolute;
-    left: var(--space-3);
     bottom: var(--space-3);
+    z-index: 4;
     font-size: 0.68rem;
     letter-spacing: 0.14em;
     text-transform: uppercase;
@@ -457,13 +495,23 @@ button, input {
     border: 1px solid var(--line);
     padding: 0.3rem 0.55rem;
     border-radius: var(--radius);
+    pointer-events: none;
+}
+
+.label-neg {
+    left: var(--space-3);
+}
+
+.label-pos {
+    right: var(--space-3);
+    left: auto;
 }
 
 .split-divider {
     position: absolute;
     top: 0;
     bottom: 0;
-    left: 50%;
+    left: var(--split);
     width: 2px;
     transform: translateX(-50%);
     background: var(--amber);
@@ -806,10 +854,12 @@ button, input {
         font-size: 0.8rem;
     }
 
-    .preview-frame,
-    .preview-half,
-    .preview-half canvas {
+    .preview-frame {
         min-height: 42vh;
+    }
+
+    .compare-stack #canvas-result,
+    .preview-split[data-mode="original"] #canvas-original {
         max-height: 48vh;
     }
 
