@@ -12,7 +12,7 @@ window.NegaToPosConfig = Object.freeze({
         'image/bmp',
         'image/avif'
     ]),
-    SITE_URL: 'https://burakkutlu27.github.io/NegaToPos/',
+    SITE_URL: 'https://negatopos.burakkutlu.com/',
     PRESETS: Object.freeze({
         auto: {
             label: 'Otomatik',

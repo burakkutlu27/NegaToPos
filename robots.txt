@@ -1,4 +1,4 @@
 User-agent: *
 Allow: /
 
-Sitemap: https://burakkutlu27.github.io/NegaToPos/sitemap.xml
+Sitemap: https://negatopos.burakkutlu.com/sitemap.xml

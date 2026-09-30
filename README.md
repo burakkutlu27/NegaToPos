@@ -6,7 +6,7 @@ Görseller sunucuya gönderilmez — tüm işlem Canvas + Web Worker ile cihazı
 
 ## Canlı demo
 
-https://burakkutlu27.github.io/NegaToPos/
+https://negatopos.burakkutlu.com/
 
 Kaynak: https://github.com/burakkutlu27/NegaToPos
 
